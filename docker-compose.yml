@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  api-auth:
+    container_name: api-auth
+    build: ./auth-service
+    env_file: ./auth-service/.env
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+  api-task:
+    container_name: api-task
+    build: ./task-service
+    env_file: ./task-service/.env
+    depends_on:
+      - db
+    ports:
+      - "3001:3001"
+    networks:
+      - backend
+  db:
+    image: mysql:latest
+    container_name: mysql-domina
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Domina
+      MYSQL_USER: carlosma
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+      - ./mysql-conf/my.cnf:/etc/mysql/conf.d/my.cnf    
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge
