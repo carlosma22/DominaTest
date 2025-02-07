@@ -29,7 +29,7 @@ Before running this project, make sure you have the following components install
 
     ```bash
     npm install
-
+    ```
 
 ## Running the Application
 
